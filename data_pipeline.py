@@ -1,4 +1,4 @@
-pip install requests BeautifulSoup pandas
+pip3 install requests BeautifulSoup pandas
 import numpy as np
 import pandas as pd
 import requests

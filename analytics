@@ -661,6 +661,13 @@ comparison[
 
 display(comparison)
 
+'''Interpretation
+Decision Tree has the highest accuracy (0.815).
+It also has the highest precision (0.781), meaning its positive survival predictions are the most precise among the three.
+It has the highest ROC-AUC (0.865), indicating the strongest discrimination between survived and not-survived cases in this test set.
+Logistic Regression has the highest recall (0.783), so it identifies more of the actual survivors.
+All three models have the same rounded F1 = 0.73; therefore F1 alone does not distinguish them at the precision shown '''
+
 from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import Pipeline as ImbPipeline
 
@@ -727,3 +734,37 @@ comparison[
 
 display(comparison)
 
+#Hyperparameter tuning:
+
+# Random Forest with OOB scoring enabled
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+
+rf_oob= RandomForestClassifier(
+    oob_score=True,
+    random_state=42,
+    n_jobs=1
+)
+
+# Keep preprocessing + Random Forest together
+rf_grid_pipeline=Pipeline([
+    ("preprocessor", pre_preprocessor),
+    ("classifier", rf_oob)
+])
+
+## --- Hyperparameter grid ---
+param_grid={
+    "n_estimators":[100,200,500],
+    "max_depth": [None,5,10,20],
+    "max_features":["sqrt","log2","0.5"]
+}
+#GridSearchCV
+grid_search = GridSearchCV(
+    estimator =rf_grid_pipeline,
+    param_grid =param_grid,
+    cv = 5,
+    scoring = 'f1',
+    n_jobs=-1,
+    refit=True
+ )

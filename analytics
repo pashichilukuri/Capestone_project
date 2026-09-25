@@ -189,22 +189,14 @@ after = len(df)
 print(f"droped {before-after} remaining rows where embarked is Naan/null")
 print(f"remaining rows {after}")
 
-
-
 before =len(df)
 df= df.dropna(subset=["embark_town"])
 after = len(df)
 print(f"droped {before-after} remaining rows where embark_town is Naan/null")
 print(f"remaining rows {after}")
 
-df[["age","embarked","deck","embark_town"]]
-
-
-
 df["deck"] = df["deck"].cat.add_categories("Missing")
 df["deck"] = df["deck"].fillna("Missing")
-
-
 
 df_missing=(df.isnull().sum()/len(df))* 100
 print(df_missing.round(2).astype(str) + "%")
@@ -660,6 +652,17 @@ comparison[
 ].round(3)
 
 display(comparison)
+
+import joblib
+
+# Save complete pipeline
+joblib.dump(
+    Random_forest_pipeline,
+    'best_titanic_classifier.joblib'
+)
+
+print("Best model: Decision Tree")
+print("Complete pipeline saved successfully.")
 
 '''Interpretation
 Decision Tree has the highest accuracy (0.815).
